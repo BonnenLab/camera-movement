@@ -53,3 +53,27 @@ Here is an example:
 #Run your program
 python camera_rotations.py ../../03_JPG_AllMasters/003MT ./rotations/
 ```
+to learn more about submitting jobs to slurm, visit https://kb.iu.edu/d/awrz.
+
+Because the algorithm takes a long time to run (about 30 minutes for every 1000 frames), you may want to perform parallel processing. To accomplish this with slurm, you can use arrays. An example is shown below:
+```
+#!/bin/bash
+
+#SBATCH -J get_mult_rotations
+#SBATCH -p gpu
+#SBATCH -o filename_%j.txt
+#SBATCH -e filename_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node v100:4
+#SBATCH --array=1-4
+#SBATCH --time=16:00:00
+
+LINE=$(sed -n "$SLURM_ARRAY_TASK_ID"p Files.txt)
+echo $LINE
+
+#Run your program
+python get_video_rot.py $LINE ./rotations/
+```
+where Files.txt is a file that contains a list of paths to video frames.
+To learn more about parallel processing with slurm, visit https://crc.ku.edu/hpc/slurm/how-to/arrays
