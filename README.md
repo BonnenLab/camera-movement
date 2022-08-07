@@ -21,6 +21,12 @@ pip install pandas
 pip install timm
 pip install gdown
  ```
+Compile DCNv2 and NG-RANSAC with the following commands:
+```
+cd models/networks/DCNv2/; sbatch make.sh; cd -
+cd models/ngransac/; sbatch make.sh; cd -
+```
+ 
 Then, load the weights for the pretrained model with the following commands:
 ```
 mkdir weights
