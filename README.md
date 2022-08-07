@@ -1,5 +1,7 @@
 # Extracting Camera Movement from Video Data
 
+NOTE: must have access to carbonate's GPU partition to run code
+
 The bulk of this algorithm comes from https://github.com/gengshan-y/rigidmask, which separates the moving foreground from the static background to accurately estimate the camera rotation matrix and translation vector between video frames. To learn more about how the algorithm accomplishes this, you can read the author's publication which can be found here: https://arxiv.org/abs/2101.03694.
 
 # Carbonate Setup
@@ -32,4 +34,22 @@ Then, load the weights for the pretrained model with the following commands:
 mkdir weights
 mkdir weights/rigidmask-sf
 gdown https://drive.google.com/uc?id=1H2khr5nI4BrcrYMBZVxXjRBQYBcgSOkh -O ./weights/rigidmask-sf/weights.pth
+```
+Now that the setup is finished, you can find camera rotations by submitting a job to slurm, which calls the camera_rotations.py file and specifies the directory of video frames and an output directory for the dataframe which contains the camera rotations.
+
+Here is an example:
+```
+#!/bin/bash
+
+#SBATCH -J get_rotations
+#SBATCH -p gpu
+#SBATCH -o filename_%j.txt
+#SBATCH -e filename_%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node v100:1
+#SBATCH --time=2:00:00
+
+#Run your program
+python camera_rotations.py ../../03_JPG_AllMasters/003MT ./rotations/
 ```
