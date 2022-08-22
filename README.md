@@ -65,8 +65,8 @@ Because the algorithm takes a long time to run (about 30 minutes for every 1000 
 #SBATCH -e filename_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --nodes=1
-#SBATCH --gpus-per-node v100:4
-#SBATCH --array=1-4
+#SBATCH --gpus-per-node v100:1
+#SBATCH --array=1-16
 #SBATCH --time=16:00:00
 
 LINE=$(sed -n "$SLURM_ARRAY_TASK_ID"p Files.txt)
