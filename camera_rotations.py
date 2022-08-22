@@ -185,32 +185,17 @@ def main():
         # use bg + valid pixels to compute R/t
         R01,T01,H01,comp_hp1,E = ddlib.pose_estimate(K0,K1,hp0,hp1,valid_mask,[0,0,0])   
         
-        # parallax flow magnitude = rectified optical flow after rotation removal
-        parallax = np.transpose((comp_hp1[:2]-hp0[:2]),[1,0]).reshape(x1.shape+(2,))        
-        parallax_mag = np.linalg.norm(parallax[:,:,:2],2,2)
-        
-        # if the average parallax flow magnitude < 2, camera is static
-        if parallax_mag[bgmask].mean()<2:
-            # static camera
-            T01_c = [0,0,0]
-        else:
-            # determine scale of translation / reconstruction
-            aligned_mask,T01_c,ranked_p = ddlib.evaluate_tri(T01,R01,K0,K1,hp0,hp1,disp,occ,bl,inlier_th=0.01,select_th=1.2,valid_mask=valid_mask)
-        
         # calculate magnitude of rotation
         mag = rotation_mag(R01)
         # calculate rotation axis
         axis = rotation_axis(R01)
         
-        if T01_c is None:
-            T01_c = [None, None, None]
-        
         # append to lists for saving
         mags.append(mag)
         axes.append(axis)
-        xs.append(T01_c[0])
-        ys.append(T01_c[1])
-        zs.append(T01_c[2])
+        xs.append(T01[0])
+        ys.append(T01[1])
+        zs.append(T01[2])
         
         torch.cuda.empty_cache()
     return xs, ys, zs, mags, axes
