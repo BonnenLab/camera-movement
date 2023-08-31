@@ -9,6 +9,9 @@ The bulk of this algorithm comes from https://github.com/gengshan-y/rigidmask, w
 After logging into Carbonate, use the command:
 ```
 module load anaconda
+module unload gcc
+module load gcc/6.5.0
+module load cudatoolkit/10.2
 ```
 to learn more about modules, visit https://kb.iu.edu/d/bcwy
 
