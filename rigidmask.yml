@@ -1,4 +1,4 @@
-name: rigidmask_v4
+name: rigidmask_v0
 channels:
   - pytorch
   - pytorch3d
